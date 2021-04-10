@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import time
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types.chat import Chat
@@ -41,6 +42,8 @@ dp = Dispatcher(bot)
 
 admin_only = lambda message: message.from_user.id == USER_ID
 
+
+
 @dp.message_handler(admin_only)
 async def echo(message: types.Message):
     try:
@@ -52,9 +55,9 @@ async def echo(message: types.Message):
     except Exception as e:
             await message.answer(e)
 
-
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+        time.sleep(10)
+        executor.start_polling(dp, skip_updates=True)
 
 # @dp.message_handler(commands=['start', 'help'])
 # async def send_welcome(message: types.Message):
