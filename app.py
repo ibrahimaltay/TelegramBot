@@ -6,6 +6,8 @@ import time
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types.chat import Chat
 
+from mailer import send_file
+
 if (str(os.uname()).split('nodename=')[1].split()[0][1:-2]) == 'rpi':
         os.chdir('/home/pi/Desktop/TelegramBot')
 
@@ -23,8 +25,6 @@ def execute_shell_command(command):
         except Exception as e:
             return e
 
-
-
 import json
 with open('config.json') as f:
     credentials = json.load(f)
@@ -35,6 +35,9 @@ API_TOKEN = credentials['API_TOKEN']
 logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
+EMAIL_ADDRESS = credentials['EMAIL_ADDRESS']
+EMAIL_PASSWORD = credentials['EMAIL_PASSWORD']
+
 CHAT_ID = int(credentials['CHAT_ID'])
 USER_ID = int(credentials['USER_ID'])
 bot = Bot(token=API_TOKEN)
@@ -42,14 +45,12 @@ dp = Dispatcher(bot)
 
 admin_only = lambda message: message.from_user.id == USER_ID
 
-
-
 @dp.message_handler(admin_only)
 async def echo(message: types.Message):
     try:
         text_array = message.text.split()
         if text_array[0] == 'sendfile':
-            await message.answer_document(document=text_array[1])
+            send_file(text_array[1].strip(), EMAIL_ADDRESS, EMAIL_PASSWORD)
         else:
             await message.answer(execute_shell_command(message.text))
     except Exception as e:
