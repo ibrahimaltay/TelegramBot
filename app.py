@@ -51,6 +51,7 @@ async def echo(message: types.Message):
         text_array = message.text.split()
         if text_array[0] == 'sendfile':
             send_file(text_array[1].strip(), EMAIL_ADDRESS, EMAIL_PASSWORD)
+            await message.answer('Emailed the file to you kind sir.')
         else:
             await message.answer(execute_shell_command(message.text))
     except Exception as e:
