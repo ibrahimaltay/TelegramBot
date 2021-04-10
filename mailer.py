@@ -6,7 +6,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-def send_file(filename, username, password):
+def send_file(filename, username, password, subject):
 
     EMAIL_ADDRESS =  username
     EMAIL_PASSWORD = password
@@ -16,8 +16,8 @@ def send_file(filename, username, password):
     sender_email = EMAIL_ADDRESS
     password = EMAIL_PASSWORD
 
-    subject = "An email with attachment from Python"
-    body = "This is an email with attachment sent from Python"
+    subject = subject
+    body = "Sent to you by Raspberry Pi"
     receiver_email = "ibrahimaltay152@hotmail.com"
 
     message = MIMEMultipart()
