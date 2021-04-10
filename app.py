@@ -5,6 +5,9 @@ import subprocess
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types.chat import Chat
 
+if (str(os.uname()).split('nodename=')[1].split()[0][1:-2]) == 'rpi':
+        os.chdir('/home/pi/Desktop/TelegramBot')
+
 def execute_shell_command(command):
     command_array = command.split()
     if command_array[0] == 'cd':
