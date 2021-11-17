@@ -52,6 +52,8 @@ async def echo(message: types.Message):
         if text_array[0] == 'sendfile':
             send_file(text_array[1].strip(), EMAIL_ADDRESS, EMAIL_PASSWORD, text_array[1].strip())
             await message.answer('Emailed the file to you kind sir.')
+        elif text_array[0] == 'setlimit' and isinstance(text_array[1], int) and len(text_array) == 2:
+            await message.answer(f'Daily usage limit is set to {text_array[1]} minutes!')
         else:
             output = execute_shell_command(message.text)
             if output:
