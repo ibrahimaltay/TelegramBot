@@ -30,7 +30,7 @@ def block_domain(domain:str):
    execute_shell_command(block_domain_command)
 
 def unblock_domain(domain:str):
-    unblock_domain_command = f"sudo /bin/sh -c 'sed \"/youtube.com/d\" /etc/hosts | sponge /etc/hosts'"
+    unblock_domain_command = f"sudo /bin/sh -c 'sed \"/{domain}/d\" /etc/hosts | sponge /etc/hosts'"
     execute_shell_command(unblock_domain_command)
 
 import json
