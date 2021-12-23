@@ -80,10 +80,10 @@ async def echo(message: types.Message):
             await message.answer(f'Daily usage limit is {daily_limit} minutes!')
         
         elif text_array[0] == 'blockdomain' and len(text_array) == 2:
-            block_domain(text_array[2])
+            block_domain(text_array[1])
         
         elif text_array[0] == 'unblockdomain' and len(text_array) == 2:
-            unblock_domain(text_array[2])
+            unblock_domain(text_array[1])
         else:
             output = execute_shell_command(message.text)
             if output:
