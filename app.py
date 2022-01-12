@@ -27,7 +27,10 @@ def execute_shell_command(command):
 
 def analyse_crypto_by_message(param, time_span_days=365, moving_average_days=30, bollinger_bands_days=30):
     output = execute_shell_command(f'python3 Crypto/main.py {param} {time_span_days} {moving_average_days} {bollinger_bands_days}')
-    send_file('export.jpg',EMAIL_ADDRESS, EMAIL_PASSWORD,'Crypto Report')
+    try:
+        send_file('export.jpg',EMAIL_ADDRESS, EMAIL_PASSWORD,'Crypto Report')
+    except:
+        output += '\ncould not send file for some reason'
     return output
 
 import json
