@@ -25,6 +25,11 @@ def execute_shell_command(command):
         except Exception as e:
             return e
 
+def analyse_crypto_by_message(param, time_span_days=365, moving_average_days=30, bollinger_bands_days=30):
+    output = execute_shell_command(f'python3 Crypto/main.py {param} {time_span_days} {moving_average_days} {bollinger_bands_days}')
+    send_file('export.jpg',EMAIL_ADDRESS, EMAIL_PASSWORD,'Crypto Report')
+    return output
+
 import json
 with open('config.json') as f:
     credentials = json.load(f)
@@ -52,6 +57,11 @@ async def echo(message: types.Message):
         if text_array[0] == 'sendfile':
             send_file(text_array[1].strip(), EMAIL_ADDRESS, EMAIL_PASSWORD, text_array[1].strip())
             await message.answer('Emailed the file to you kind sir.')
+        elif text_array[0] == 'analyse':
+            output = analyse_crypto_by_message(text_array[1], text_array[2], text_array[3], text_array[4])
+            if output:
+                output += "\nSent you a detailed report sir."
+                await message.answer(output)
         else:
             output = execute_shell_command(message.text)
             if output:
