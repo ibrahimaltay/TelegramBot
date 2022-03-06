@@ -2,9 +2,12 @@ import logging
 import os
 import subprocess
 import time
+import json
+
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types.chat import Chat
+from expenseLogger.ExpLogger import *
 
 from mailer import send_file
 
@@ -25,7 +28,6 @@ def execute_shell_command(command):
         except Exception as e:
             return e
 
-import json
 with open('config.json') as f:
     credentials = json.load(f)
 
@@ -43,15 +45,27 @@ USER_ID = int(credentials['USER_ID'])
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
+
 admin_only = lambda message: message.from_user.id == USER_ID
 
 @dp.message_handler(admin_only)
 async def echo(message: types.Message):
+
     try:
         text_array = message.text.split()
+
         if text_array[0] == 'sendfile':
             send_file(text_array[1].strip(), EMAIL_ADDRESS, EMAIL_PASSWORD, text_array[1].strip())
             await message.answer('Emailed the file to you kind sir.')
+        
+        elif text_array[0] == 'gider':
+            try:
+                ExpLogger.write_expense_row(text_array[1])
+                await message.answer("Added expense sir.")
+            except Exception as e:
+                print(e)      
+                await message.answer(e)      
+
         else:
             output = execute_shell_command(message.text)
             if output:
@@ -60,7 +74,7 @@ async def echo(message: types.Message):
             await message.answer(e)
 
 if __name__ == '__main__':
-        time.sleep(10)
+        time.sleep(2)
         executor.start_polling(dp, skip_updates=True)
 
 # @dp.message_handler(commands=['start', 'help'])
